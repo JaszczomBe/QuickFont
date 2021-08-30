@@ -100,7 +100,7 @@ namespace QuickFont
         /// <returns>The converted bitmap bytes</returns>
         private static byte[] ConvertBgraToRgba(BitmapData dataSource)
         {
-            var length = dataSource.Stride*dataSource.Height;
+            var length = dataSource.Stride * dataSource.Height;
 
             var rawData = new byte[length];
 

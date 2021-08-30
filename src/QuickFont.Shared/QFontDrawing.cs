@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Linq;
-using OpenTK;
+using OpenTK.Mathematics;
 #if OPENGL_ES
 using OpenTK.Graphics.ES20;
 #else
@@ -140,7 +140,7 @@ namespace QuickFont
                 GL.ShaderSource(vert, version + LoadShaderFromResource("simple.vs"));
                 GL.ShaderSource(frag, version + LoadShaderFromResource("simple.fs"));
 #endif
-                
+
                 GL.CompileShader(vert);
                 GL.CompileShader(frag);
 
@@ -374,7 +374,7 @@ namespace QuickFont
         {
             var dp = new QFontDrawingPrimitive(font);
             DrawingPrimitives.Add(dp);
-            if( color.HasValue )
+            if (color.HasValue)
                 return dp.Print(text, position, alignment, color.Value, clippingRectangle);
             return dp.Print(text, position, alignment, clippingRectangle);
         }
@@ -406,7 +406,7 @@ namespace QuickFont
         /// <param name="alignment">The text alignment</param>
         /// <param name="opt">The render options</param>
         /// <returns>The size of the printed text</returns>
-        public SizeF Print(QFont font, string text, Vector3 position, SizeF maxSize, QFontAlignment alignment, QFontRenderOptions opt )
+        public SizeF Print(QFont font, string text, Vector3 position, SizeF maxSize, QFontAlignment alignment, QFontRenderOptions opt)
         {
             var dp = new QFontDrawingPrimitive(font, opt);
             DrawingPrimitives.Add(dp);

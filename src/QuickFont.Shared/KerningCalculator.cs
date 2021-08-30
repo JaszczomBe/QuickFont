@@ -1,6 +1,6 @@
-﻿using System;
+﻿using QuickFont.Configuration;
+using System;
 using System.Collections.Generic;
-using QuickFont.Configuration;
 
 namespace QuickFont
 {
@@ -27,8 +27,8 @@ namespace QuickFont
         /// <returns>The x coordinate kerning offset</returns>
         private static int Kerning(QFontGlyph g1, QFontGlyph g2, XLimits[] lim1, XLimits[] lim2, QFontKerningConfiguration config, IFont font)
         {
-			// Use kerning information from the font if it exists
-			if (font != null && font.HasKerningInformation) return font.GetKerning(g1.Character, g2.Character);
+            // Use kerning information from the font if it exists
+            if (font != null && font.HasKerningInformation) return font.GetKerning(g1.Character, g2.Character);
 
             // Otherwise, calculate our own kerning
             int yOffset1 = g1.YOffset;
@@ -44,20 +44,20 @@ namespace QuickFont
             //TODO - offset startY, endY by yOffset1 so that lim1[j-yOffset1] can be written as lim1[j], will need another var for yOffset2
 
             for (int j = startY; j < endY; j++)
-                worstCase = Math.Min(worstCase, w1 - lim1[j-yOffset1].Max + lim2[j-yOffset2].Min);
+                worstCase = Math.Min(worstCase, w1 - lim1[j - yOffset1].Max + lim2[j - yOffset2].Min);
 
             worstCase = Math.Min(worstCase, g1.Rect.Width);
             worstCase = Math.Min(worstCase, g2.Rect.Width);
 
             //modify by character kerning rules
-            CharacterKerningRule kerningRule = config.GetOverridingCharacterKerningRuleForPair(""+g1.Character + g2.Character);
+            CharacterKerningRule kerningRule = config.GetOverridingCharacterKerningRuleForPair("" + g1.Character + g2.Character);
 
             switch (kerningRule)
             {
                 case CharacterKerningRule.Zero:
                     return 1;
                 case CharacterKerningRule.NotMoreThanHalf:
-                    return 1 - (int)Math.Min(Math.Min(g1.Rect.Width,g2.Rect.Width)*0.5f, worstCase);
+                    return 1 - (int)Math.Min(Math.Min(g1.Rect.Width, g2.Rect.Width) * 0.5f, worstCase);
             }
 
             return 1 - worstCase;
@@ -84,7 +84,7 @@ namespace QuickFont
                 var rect = glyphs[n].Rect;
                 var page = bitmapPages[glyphs[n].Page];
 
-                limits[n] = new XLimits[rect.Height+1];
+                limits[n] = new XLimits[rect.Height + 1];
 
                 maxHeight = Math.Max(rect.Height, maxHeight);
 
@@ -100,7 +100,7 @@ namespace QuickFont
                     bool yetToFindFirst = true;
                     for (int i = xStart; i <= xEnd; i++)
                     {
-                        if (!QBitmap.EmptyAlphaPixel(page.BitmapData, i, j,config.AlphaEmptyPixelTolerance))
+                        if (!QBitmap.EmptyAlphaPixel(page.BitmapData, i, j, config.AlphaEmptyPixelTolerance))
                         {
 
                             if (yetToFindFirst)
@@ -120,7 +120,7 @@ namespace QuickFont
             }
 
             //we now bring up each row to the max (or min) of it's two adjacent rows, this is to stop glyphs sliding together too closely
-            var tmp = new XLimits[maxHeight+1];
+            var tmp = new XLimits[maxHeight + 1];
 
             for (int n = 0; n < charSet.Length; n++)
             {
@@ -130,7 +130,8 @@ namespace QuickFont
 
                 for (int j = 0; j < limits[n].Length; j++)
                 {
-                    if(j != 0){
+                    if (j != 0)
+                    {
                         tmp[j].Min = Math.Min(limits[n][j - 1].Min, tmp[j].Min);
                         tmp[j].Max = Math.Max(limits[n][j - 1].Max, tmp[j].Max);
                     }
@@ -140,7 +141,7 @@ namespace QuickFont
                         tmp[j].Min = Math.Min(limits[n][j + 1].Min, tmp[j].Min);
                         tmp[j].Max = Math.Max(limits[n][j + 1].Max, tmp[j].Max);
                     }
-                    
+
                 }
 
                 for (int j = 0; j < limits[n].Length; j++)
@@ -151,7 +152,7 @@ namespace QuickFont
             // combine it with every other character and add it to the kerning pair dictionary
             for (int i = 0; i < charSet.Length; i++)
                 for (int j = 0; j < charSet.Length; j++)
-                    kerningPairs.Add("" + charSet[i] + charSet[j], Kerning(glyphs[i], glyphs[j], limits[i], limits[j],config, font));
+                    kerningPairs.Add("" + charSet[i] + charSet[j], Kerning(glyphs[i], glyphs[j], limits[i], limits[j], config, font));
 
             return kerningPairs;
         }

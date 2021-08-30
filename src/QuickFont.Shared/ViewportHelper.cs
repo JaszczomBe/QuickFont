@@ -1,9 +1,9 @@
-﻿using OpenTK;
-using OpenTK.Graphics;
-#if OPENGL_ES
+﻿#if OPENGL_ES
 using OpenTK.Graphics.ES20;
+using OpenTK.Mathematics;
 #else
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 #endif
 
 namespace QuickFont
@@ -51,15 +51,17 @@ namespace QuickFont
         /// <summary>
         /// The current viewport
         /// </summary>
-        public static Viewport? CurrentViewport {
-            get {
+        public static Viewport? CurrentViewport
+        {
+            get
+            {
 
                 if (_currentViewport == null)
                 {
                     UpdateCurrentViewport();
                 }
 
-                return _currentViewport; 
+                return _currentViewport;
             }
         }
         private static Viewport? _currentViewport;
@@ -69,7 +71,7 @@ namespace QuickFont
         /// </summary>
         public static void UpdateCurrentViewport()
         {
-            GraphicsContext.Assert();
+            //GraphicsContext.Assert();
             int[] viewportInts = new int[4];
 
             GL.GetInteger(GetPName.Viewport, viewportInts);

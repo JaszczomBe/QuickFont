@@ -1,7 +1,7 @@
-﻿using System;
+﻿using QuickFont.Configuration;
+using System;
 using System.Diagnostics;
 using System.Drawing;
-using QuickFont.Configuration;
 
 namespace QuickFont
 {
@@ -16,12 +16,12 @@ namespace QuickFont
         /// <summary>
         /// The maximum line height for the glyph set, unscaled
         /// </summary>
-        public int MaxLineHeight {get { return FontData.MaxLineHeight; }}
+        public int MaxLineHeight { get { return FontData.MaxLineHeight; } }
 
         /// <summary>
         /// The maximum glyph height for the glyph set, unscaled
         /// </summary>
-        public int MaxGlyphHeight {get { return FontData.MaxGlyphHeight; }}
+        public int MaxGlyphHeight { get { return FontData.MaxGlyphHeight; } }
 
         /// <summary>
         /// The <see cref="QFontData"/> corresponding to this <see cref="QFont"/>
@@ -96,7 +96,7 @@ namespace QuickFont
         {
             float fontScale = 1f;
 
-            InitialiseQFont(null, new QFontBuilderConfiguration(loaderConfig), Builder.LoadQFontDataFromFile(qfontPath, downSampleFactor*fontScale, loaderConfig));
+            InitialiseQFont(null, new QFontBuilderConfiguration(loaderConfig), Builder.LoadQFontDataFromFile(qfontPath, downSampleFactor * fontScale, loaderConfig));
             FontName = qfontPath;
         }
 
@@ -109,7 +109,7 @@ namespace QuickFont
         private void InitialiseQFont(IFont font, QFontBuilderConfiguration config, QFontData data = null)
         {
             FontData = data ?? BuildFont(font, config, null);
-            
+
             // Check and fail if more than one texture was generated. The original implementation of QFont supported
             // this by choosing them as the come but this ModernOpenGl -implementation would be handycapped by 
             // allowing this degree of freedom. It is now possible to call DrawArrays for whole texts (requiring
@@ -118,7 +118,7 @@ namespace QuickFont
             // necessrily being base2 and square - this generousity should be hapily used and effiency be gained.
             // So there will be no implementation of VAO VBO based "Modern" OpenGL that is limited to 512 textures.
             // So this is a well takeable tradeoff
-            if( FontData.Pages.Length != 1 || (FontData.DropShadowFont != null && FontData.DropShadowFont.FontData.Pages.Length != 1))
+            if (FontData.Pages.Length != 1 || (FontData.DropShadowFont != null && FontData.DropShadowFont.FontData.Pages.Length != 1))
             {
                 throw new NotSupportedException("The implementation of QFontDrawing does not support multiple textures per Font/Shadow. " +
                                                 "Thus this font can not be properly rendered in all cases. Reduce number of characters " +
@@ -170,8 +170,8 @@ namespace QuickFont
             // If the font file exists load it using FreeTypeFont,
             // otherwise assume it references an internal font, and
             // load it using GDIFont (which will use the InstalledFontCollection)
-            return System.IO.File.Exists(fontPath) ? 
-                new FreeTypeFont(fontPath, size, style, superSampleLevels, scale) : 
+            return System.IO.File.Exists(fontPath) ?
+                new FreeTypeFont(fontPath, size, style, superSampleLevels, scale) :
                 (new GDIFont(fontPath, size, style, superSampleLevels, scale)) as IFont;
         }
 

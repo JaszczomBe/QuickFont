@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using OpenTK;
 #if OPENGL_ES
 using OpenTK.Graphics.ES20;
+using OpenTK.Mathematics;
 #else
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 #endif
 
 namespace QuickFont
@@ -15,12 +16,12 @@ namespace QuickFont
     /// </summary>
 	internal static class Helper
     {
-		/// <summary>
-		/// Returns an array copy of <see cref="ICollection{T}"/>
-		/// </summary>
-		/// <typeparam name="T">The type of the collection item</typeparam>
-		/// <param name="collection">The collection to copy</param>
-		/// <returns>The <see cref="ICollection{T}"/> copied to an array</returns>
+        /// <summary>
+        /// Returns an array copy of <see cref="ICollection{T}"/>
+        /// </summary>
+        /// <typeparam name="T">The type of the collection item</typeparam>
+        /// <param name="collection">The collection to copy</param>
+        /// <returns>The <see cref="ICollection{T}"/> copied to an array</returns>
         public static T[] ToArray<T>(ICollection<T> collection)
         {
             T[] output = new T[collection.Count];
@@ -57,7 +58,7 @@ namespace QuickFont
             {
                 if (GL.IsEnabled(caps[i]))
                     previouslyEnabled[i] = true;
-                else 
+                else
                     GL.Enable(caps[i]);
             }
 
@@ -70,30 +71,30 @@ namespace QuickFont
             }
         }
 
-		/// <summary>
-		/// Converts the given <see cref="Color"/> to RGBA
-		/// <para/>
-		/// Colour bytes are converted with
-		/// <c>color.A &lt;&lt; 24 | color.B &lt;&lt; 16 | color.G &lt;&lt; 8 | color.R</c>
-		/// </summary>
-		/// <param name="color">The <see cref="Color"/> to convert</param>
-		/// <returns>The 32-bit RGBA values of the colour</returns>
-		public static int ToRgba(Color color)
+        /// <summary>
+        /// Converts the given <see cref="Color"/> to RGBA
+        /// <para/>
+        /// Colour bytes are converted with
+        /// <c>color.A &lt;&lt; 24 | color.B &lt;&lt; 16 | color.G &lt;&lt; 8 | color.R</c>
+        /// </summary>
+        /// <param name="color">The <see cref="Color"/> to convert</param>
+        /// <returns>The 32-bit RGBA values of the colour</returns>
+        public static int ToRgba(Color color)
         {
             return color.A << 24 | color.B << 16 | color.G << 8 | color.R;
         }
 
-		/// <summary>
-		/// Converts the given <see cref="Color"/> to a <see cref="Vector4"/>,
-		/// such that XYZW = RGBA.
-		/// <para></para>
-		/// Vector values are normalized between 0.0 and 1.0
-		/// </summary>
-		/// <param name="color">The <see cref="Color"/> to convert</param>
-		/// <returns>The <see cref="Vector4"/> of the color</returns>
+        /// <summary>
+        /// Converts the given <see cref="Color"/> to a <see cref="Vector4"/>,
+        /// such that XYZW = RGBA.
+        /// <para></para>
+        /// Vector values are normalized between 0.0 and 1.0
+        /// </summary>
+        /// <param name="color">The <see cref="Color"/> to convert</param>
+        /// <returns>The <see cref="Vector4"/> of the color</returns>
         public static Vector4 ToVector4(Color color)
         {
-            return new Vector4{X = (float)color.R / byte.MaxValue, Y = (float)color.G / byte.MaxValue, Z = (float)color.B / byte.MaxValue, W = (float)color.A / byte.MaxValue};
+            return new Vector4 { X = (float)color.R / byte.MaxValue, Y = (float)color.G / byte.MaxValue, Z = (float)color.B / byte.MaxValue, W = (float)color.A / byte.MaxValue };
         }
     }
 }

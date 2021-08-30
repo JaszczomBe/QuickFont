@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK;
+using OpenTK.Mathematics;
 #if OPENGL_ES
 using OpenTK.Graphics.ES20;
 #else
@@ -80,7 +81,7 @@ namespace QuickFont
             GL.BindBuffer(BufferTarget.ArrayBuffer, _VBOID);
             EnableAttributes();
 
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)_bufferSize, IntPtr.Zero, BufferUsageHint.StreamDraw );
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)_bufferSize, IntPtr.Zero, BufferUsageHint.StreamDraw);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
@@ -137,13 +138,13 @@ namespace QuickFont
                 while (VertexCount > _bufferMaxVertexCount)
                 {
                     _bufferMaxVertexCount += INITIAL_SIZE;
-                    _bufferSize = _bufferMaxVertexCount*QVertexStride;
+                    _bufferSize = _bufferMaxVertexCount * QVertexStride;
                 }
 
                 //reinitialise buffer with new _bufferSize
-                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr) _bufferSize, IntPtr.Zero, BufferUsageHint.StreamDraw);
+                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)_bufferSize, IntPtr.Zero, BufferUsageHint.StreamDraw);
             }
-            GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr) (VertexCount*QVertexStride), _vertexArray);
+            GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr)(VertexCount * QVertexStride), _vertexArray);
         }
 
         /// <summary>
@@ -192,9 +193,9 @@ namespace QuickFont
                 VertexAttribPointerType.Float, false, stride, IntPtr.Zero);
             GL.VertexAttribPointer(QFontSharedState.ShaderVariables.TextureCoordAttribLocation, 2, VertexAttribPointerType.Float,
                 false,
-                stride, new IntPtr(3*sizeof (float)));
+                stride, new IntPtr(3 * sizeof(float)));
             GL.VertexAttribPointer(QFontSharedState.ShaderVariables.ColorCoordAttribLocation, 4, VertexAttribPointerType.Float,
-                false, stride, new IntPtr(5*sizeof (float)));
+                false, stride, new IntPtr(5 * sizeof(float)));
         }
 
         private bool _disposedValue; // To detect redundant calls

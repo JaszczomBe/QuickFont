@@ -69,7 +69,8 @@ namespace QuickFont
         /// </summary>
         /// <param name="type">The text node type</param>
         /// <param name="text">The text node text</param>
-        public TextNode(TextNodeType type, string text){
+        public TextNode(TextNodeType type, string text)
+        {
             Type = type;
             Text = text;
         }
@@ -164,11 +165,13 @@ namespace QuickFont
         /// </summary>
         /// <param name="fontData">The font data to use for measuring</param>
         /// <param name="options">The render options</param>
-        public void MeasureNodes(QFontData fontData, QFontRenderOptions options){
-            
-            foreach(TextNode node in this){
-                if(Math.Abs(node.Length) < float.Epsilon)
-                    node.Length = MeasureTextNodeLength(node,fontData,options);
+        public void MeasureNodes(QFontData fontData, QFontRenderOptions options)
+        {
+
+            foreach (TextNode node in this)
+            {
+                if (Math.Abs(node.Length) < float.Epsilon)
+                    node.Length = MeasureTextNodeLength(node, fontData, options);
             }
         }
 
@@ -197,7 +200,7 @@ namespace QuickFont
             float height = 0f;
             if (node.Type == TextNodeType.Word)
             {
-                
+
                 for (int i = 0; i < node.Text.Length; i++)
                 {
                     char c = node.Text[i];
@@ -221,17 +224,18 @@ namespace QuickFont
         /// </summary>
         /// <param name="node"></param>
         /// <param name="baseCaseSize"></param>
-        public void Crumble(TextNode node, int baseCaseSize){
+        public void Crumble(TextNode node, int baseCaseSize)
+        {
 
             //base case
-            if(node.Text.Length <= baseCaseSize )
+            if (node.Text.Length <= baseCaseSize)
                 return;
- 
+
             var left = SplitNode(node);
             var right = left.Next;
 
-            Crumble(left,baseCaseSize);
-            Crumble(right,baseCaseSize);
+            Crumble(left, baseCaseSize);
+            Crumble(right, baseCaseSize);
 
         }
 
@@ -283,10 +287,13 @@ namespace QuickFont
         public void Add(TextNode node)
         {
             //new node is head (and tail)
-            if(Head == null){
+            if (Head == null)
+            {
                 Head = node;
                 Tail = node;
-            } else {
+            }
+            else
+            {
                 Tail.Next = node;
                 node.Previous = Tail;
                 Tail = node;
@@ -302,9 +309,9 @@ namespace QuickFont
             StringBuilder builder = new StringBuilder();
 
 
-           // for (var node = Head; node.Next != null; node = node.Next)
+            // for (var node = Head; node.Next != null; node = node.Next)
 
-            foreach(TextNode node in this)
+            foreach (TextNode node in this)
             {
                 if (node.Type == TextNodeType.Space)
                     builder.Append(" ");

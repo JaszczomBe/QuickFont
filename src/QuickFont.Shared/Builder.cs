@@ -1,10 +1,10 @@
-﻿using System;
+﻿using QuickFont.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
-using QuickFont.Configuration;
 
 namespace QuickFont
 {
@@ -23,7 +23,7 @@ namespace QuickFont
             _charSet = config.CharSet;
             _config = config;
             _font = font;
-            
+
         }
 
         private static Dictionary<char, QFontGlyph> CreateCharGlyphMapping(QFontGlyph[] glyphs)
@@ -51,8 +51,8 @@ namespace QuickFont
 
             foreach (char t in _charSet)
             {
-	            var charSize = font.MeasureString("" + t, graph);
-	            sizes.Add(new SizeF(charSize.Width+padding, charSize.Height+padding));
+                var charSize = font.MeasureString("" + t, graph);
+                sizes.Add(new SizeF(charSize.Width + padding, charSize.Height + padding));
             }
 
             graph.Dispose();
@@ -61,11 +61,11 @@ namespace QuickFont
             return sizes;
         }
 
-		/// <summary>
-		/// Returns the maximum width and maximum height from the list of sizes
-		/// </summary>
-		/// <param name="sizes"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Returns the maximum width and maximum height from the list of sizes
+        /// </summary>
+        /// <param name="sizes"></param>
+        /// <returns></returns>
         private SizeF GetMaxGlyphSize(List<SizeF> sizes)
         {
             SizeF maxSize = new SizeF(0f, 0f);
@@ -81,11 +81,11 @@ namespace QuickFont
             return maxSize;
         }
 
-		/// <summary>
-		/// Returns the minimum width and minimum height from the list of sizes
-		/// </summary>
-		/// <param name="sizes"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Returns the minimum width and minimum height from the list of sizes
+        /// </summary>
+        /// <param name="sizes"></param>
+        /// <returns></returns>
         private SizeF GetMinGlyphSize(List<SizeF> sizes)
         {
             SizeF minSize = new SizeF(float.MaxValue, float.MaxValue);
@@ -117,15 +117,15 @@ namespace QuickFont
             return false;
         }
 
-		/// <summary>
-		/// Creates the initial font bitmap. This is simply a long thin strip of all glyphs in a row
-		/// </summary>
-		/// <param name="font">The <see cref="IFont"/> object to build the initial bitmap from</param>
-		/// <param name="maxSize">The maximum glyph size of the font</param>
-		/// <param name="initialMargin">The initial bitmap margin (used for all four sides)</param>
-		/// <param name="glyphs">A collection of <see cref="QFontGlyph"/>s corresponding to the initial bitmap</param>
-		/// <param name="renderHint">The font rendering hint to use</param>
-		/// <returns></returns>
+        /// <summary>
+        /// Creates the initial font bitmap. This is simply a long thin strip of all glyphs in a row
+        /// </summary>
+        /// <param name="font">The <see cref="IFont"/> object to build the initial bitmap from</param>
+        /// <param name="maxSize">The maximum glyph size of the font</param>
+        /// <param name="initialMargin">The initial bitmap margin (used for all four sides)</param>
+        /// <param name="glyphs">A collection of <see cref="QFontGlyph"/>s corresponding to the initial bitmap</param>
+        /// <param name="renderHint">The font rendering hint to use</param>
+        /// <returns></returns>
         private Bitmap CreateInitialBitmap(IFont font, SizeF maxSize, int initialMargin, out QFontGlyph[] glyphs, TextGenerationRenderHint renderHint)
         {
             glyphs = new QFontGlyph[_charSet.Length];
@@ -134,15 +134,16 @@ namespace QuickFont
             Bitmap bmp = new Bitmap(spacing * _charSet.Length, (int)Math.Ceiling(maxSize.Height) + 2 * initialMargin, PixelFormat.Format24bppRgb);
             Graphics graph = Graphics.FromImage(bmp);
 
-            switch(renderHint){
-                case TextGenerationRenderHint.SizeDependent: 
-                    graph.TextRenderingHint = font.Size <= 12.0f  ? TextRenderingHint.ClearTypeGridFit : TextRenderingHint.AntiAlias; 
+            switch (renderHint)
+            {
+                case TextGenerationRenderHint.SizeDependent:
+                    graph.TextRenderingHint = font.Size <= 12.0f ? TextRenderingHint.ClearTypeGridFit : TextRenderingHint.AntiAlias;
                     break;
-                case TextGenerationRenderHint.AntiAlias: 
-                    graph.TextRenderingHint = TextRenderingHint.AntiAlias; 
+                case TextGenerationRenderHint.AntiAlias:
+                    graph.TextRenderingHint = TextRenderingHint.AntiAlias;
                     break;
-                case TextGenerationRenderHint.AntiAliasGridFit: 
-                    graph.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; 
+                case TextGenerationRenderHint.AntiAliasGridFit:
+                    graph.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                     break;
                 case TextGenerationRenderHint.ClearTypeGridFit:
                     graph.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
@@ -152,15 +153,15 @@ namespace QuickFont
                     break;
             }
 
-			// enable high quality graphics
-			graph.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-			graph.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-			graph.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+            // enable high quality graphics
+            graph.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            graph.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            graph.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
 
             int xOffset = initialMargin;
             for (int i = 0; i < _charSet.Length; i++)
             {
-				var offset = font.DrawString("" + _charSet[i], graph, Brushes.White, xOffset, initialMargin);
+                var offset = font.DrawString("" + _charSet[i], graph, Brushes.White, xOffset, initialMargin);
                 var charSize = font.MeasureString("" + _charSet[i], graph);
                 glyphs[i] = new QFontGlyph(0, new Rectangle(xOffset - initialMargin + offset.X, initialMargin + offset.Y, (int)charSize.Width + initialMargin * 2, (int)charSize.Height + initialMargin * 2), 0, _charSet[i]);
                 xOffset += (int)charSize.Width + initialMargin * 2;
@@ -174,14 +175,14 @@ namespace QuickFont
 
         private delegate bool EmptyDel(BitmapData data, int x, int y);
 
-		/// <summary>
-		/// Retargets a given glyph rectangle inwards, to find the minimum bounding box
-		/// Assumes the current bounding box is larger than the minimum
-		/// </summary>
-		/// <param name="bitmapData">The bitmap containing the glyph</param>
-		/// <param name="glyph">The <see cref="QFontGlyph"/> to retarget</param>
-		/// <param name="setYOffset">Whether to update the y offset of the glyph or not</param>
-		/// <param name="alphaTolerance">The alpha tolerance</param>
+        /// <summary>
+        /// Retargets a given glyph rectangle inwards, to find the minimum bounding box
+        /// Assumes the current bounding box is larger than the minimum
+        /// </summary>
+        /// <param name="bitmapData">The bitmap containing the glyph</param>
+        /// <param name="glyph">The <see cref="QFontGlyph"/> to retarget</param>
+        /// <param name="setYOffset">Whether to update the y offset of the glyph or not</param>
+        /// <param name="alphaTolerance">The alpha tolerance</param>
         private static void RetargetGlyphRectangleInwards(BitmapData bitmapData, QFontGlyph glyph, bool setYOffset, byte alphaTolerance)
         {
             int startX, endX;
@@ -192,36 +193,36 @@ namespace QuickFont
             EmptyDel emptyPix;
 
             if (bitmapData.PixelFormat == PixelFormat.Format32bppArgb)
-                emptyPix = delegate(BitmapData data, int x, int y) { return QBitmap.EmptyAlphaPixel(data, x, y, alphaTolerance); };
+                emptyPix = delegate (BitmapData data, int x, int y) { return QBitmap.EmptyAlphaPixel(data, x, y, alphaTolerance); };
             else
-                emptyPix = delegate(BitmapData data, int x, int y) { return QBitmap.EmptyPixel(data, x, y); };
+                emptyPix = delegate (BitmapData data, int x, int y) { return QBitmap.EmptyPixel(data, x, y); };
 
-			for (startX = rect.X; startX < bitmapData.Width; startX++)
-				for (int j = rect.Y; j <= rect.Y + rect.Height; j++)
-					if (!emptyPix(bitmapData, startX, j))
-						goto Done1;
-			Done1:
+            for (startX = rect.X; startX < bitmapData.Width; startX++)
+                for (int j = rect.Y; j <= rect.Y + rect.Height; j++)
+                    if (!emptyPix(bitmapData, startX, j))
+                        goto Done1;
+                    Done1:
 
-			for (endX = rect.X + rect.Width; endX >= 0; endX--)
-				for (int j = rect.Y; j <= rect.Y + rect.Height; j++)
-					if (!emptyPix(bitmapData, endX, j))
-						goto Done2;
-			Done2:
+            for (endX = rect.X + rect.Width; endX >= 0; endX--)
+                for (int j = rect.Y; j <= rect.Y + rect.Height; j++)
+                    if (!emptyPix(bitmapData, endX, j))
+                        goto Done2;
+                    Done2:
 
-			for (startY = rect.Y; startY < bitmapData.Height; startY++)
-				for (int i = startX; i <= endX; i++)
-					if (!emptyPix(bitmapData, i, startY))
-						goto Done3;
-                            
-			Done3:
+            for (startY = rect.Y; startY < bitmapData.Height; startY++)
+                for (int i = startX; i <= endX; i++)
+                    if (!emptyPix(bitmapData, i, startY))
+                        goto Done3;
 
-			for (endY = rect.Y + rect.Height; endY >= 0; endY--)
-				for (int i = startX; i <= endX; i++)
-					if (!emptyPix(bitmapData, i, endY))
-						goto Done4;
-			Done4:
+                    Done3:
 
-			if (endY < startY)
+            for (endY = rect.Y + rect.Height; endY >= 0; endY--)
+                for (int i = startX; i <= endX; i++)
+                    if (!emptyPix(bitmapData, i, endY))
+                        goto Done4;
+                    Done4:
+
+            if (endY < startY)
                 startY = endY = rect.Y;
 
             if (endX < startX)
@@ -233,120 +234,120 @@ namespace QuickFont
                 glyph.YOffset = glyph.Rect.Y;
         }
 
-		/// <summary>
-		/// Retargets a given glyph rectangle outwards, to find the minimum bounding box
-		/// Assumes the current bounding box is smaller than the minimum
-		/// </summary>
-		/// <param name="bitmapData">The bitmap containing the glyph</param>
-		/// <param name="glyph">The <see cref="QFontGlyph"/> to retarget</param>
-		/// <param name="setYOffset">Whether to update the y offset of the glyph or not</param>
-		/// <param name="alphaTolerance">The alpha tolerance</param>
-		private static void RetargetGlyphRectangleOutwards(BitmapData bitmapData, QFontGlyph glyph, bool setYOffset, byte alphaTolerance)
+        /// <summary>
+        /// Retargets a given glyph rectangle outwards, to find the minimum bounding box
+        /// Assumes the current bounding box is smaller than the minimum
+        /// </summary>
+        /// <param name="bitmapData">The bitmap containing the glyph</param>
+        /// <param name="glyph">The <see cref="QFontGlyph"/> to retarget</param>
+        /// <param name="setYOffset">Whether to update the y offset of the glyph or not</param>
+        /// <param name="alphaTolerance">The alpha tolerance</param>
+        private static void RetargetGlyphRectangleOutwards(BitmapData bitmapData, QFontGlyph glyph, bool setYOffset, byte alphaTolerance)
         {
-            int startX,endX;
-            int startY,endY;
+            int startX, endX;
+            int startY, endY;
 
             var rect = glyph.Rect;
 
             EmptyDel emptyPix;
 
             if (bitmapData.PixelFormat == PixelFormat.Format32bppArgb)
-                emptyPix = delegate(BitmapData data, int x, int y) { return QBitmap.EmptyAlphaPixel(data, x, y, alphaTolerance); };
+                emptyPix = delegate (BitmapData data, int x, int y) { return QBitmap.EmptyAlphaPixel(data, x, y, alphaTolerance); };
             else
-                emptyPix = delegate(BitmapData data, int x, int y) { return QBitmap.EmptyPixel(data, x, y); };
+                emptyPix = delegate (BitmapData data, int x, int y) { return QBitmap.EmptyPixel(data, x, y); };
 
-			for (startX = rect.X; startX >= 0; startX--)
-			{
-				bool foundPix = false;
-				for (int j = rect.Y; j <= rect.Y + rect.Height; j++)
-				{
-					if (!emptyPix(bitmapData, startX, j))
-					{
-						foundPix = true;
-						break;
-					}
-				}
+            for (startX = rect.X; startX >= 0; startX--)
+            {
+                bool foundPix = false;
+                for (int j = rect.Y; j <= rect.Y + rect.Height; j++)
+                {
+                    if (!emptyPix(bitmapData, startX, j))
+                    {
+                        foundPix = true;
+                        break;
+                    }
+                }
 
-				if (!foundPix)
-				{
-					startX++;
-					break;
-				}
-			}
+                if (!foundPix)
+                {
+                    startX++;
+                    break;
+                }
+            }
 
-			for (endX = rect.X + rect.Width; endX < bitmapData.Width; endX++)
-			{
-				bool foundPix = false;
-				for (int j = rect.Y; j <= rect.Y + rect.Height; j++)
-				{
-					if (!emptyPix(bitmapData, endX, j))
-					{
-						foundPix = true;
-						break; 
-					}
-				}
+            for (endX = rect.X + rect.Width; endX < bitmapData.Width; endX++)
+            {
+                bool foundPix = false;
+                for (int j = rect.Y; j <= rect.Y + rect.Height; j++)
+                {
+                    if (!emptyPix(bitmapData, endX, j))
+                    {
+                        foundPix = true;
+                        break;
+                    }
+                }
 
-				if (!foundPix)
-				{
-					endX--;
-					break;
-				}
-			}
+                if (!foundPix)
+                {
+                    endX--;
+                    break;
+                }
+            }
 
-			for (startY = rect.Y; startY >= 0; startY--)
-			{
-				bool foundPix = false;
-				for (int i = startX; i <= endX; i++)
-				{
-					if (!emptyPix(bitmapData, i, startY))
-					{
-						foundPix = true;
-						break;
-					}
-				}
+            for (startY = rect.Y; startY >= 0; startY--)
+            {
+                bool foundPix = false;
+                for (int i = startX; i <= endX; i++)
+                {
+                    if (!emptyPix(bitmapData, i, startY))
+                    {
+                        foundPix = true;
+                        break;
+                    }
+                }
 
-				if (!foundPix)
-				{
-					startY++;
-					break;
-				}
-			}
+                if (!foundPix)
+                {
+                    startY++;
+                    break;
+                }
+            }
 
-			for (endY = rect.Y + rect.Height; endY < bitmapData.Height; endY++)
-			{
-				bool foundPix = false;
-				for (int i = startX; i <= endX; i++)
-				{
-					if (!emptyPix(bitmapData, i, endY))
-					{
-						foundPix = true;
-						break;
-					}
-				}
+            for (endY = rect.Y + rect.Height; endY < bitmapData.Height; endY++)
+            {
+                bool foundPix = false;
+                for (int i = startX; i <= endX; i++)
+                {
+                    if (!emptyPix(bitmapData, i, endY))
+                    {
+                        foundPix = true;
+                        break;
+                    }
+                }
 
-				if (!foundPix)
-				{
-					endY--;
-					break;
-				}
-			}
+                if (!foundPix)
+                {
+                    endY--;
+                    break;
+                }
+            }
 
-			glyph.Rect = new Rectangle(startX, startY, endX - startX + 1, endY - startY + 1);
+            glyph.Rect = new Rectangle(startX, startY, endX - startX + 1, endY - startY + 1);
 
             if (setYOffset)
                 glyph.YOffset = glyph.Rect.Y;
         }
 
-		/// <summary>
-		/// Generates the final bitmap sheet for the font
-		/// </summary>
-		/// <param name="sourceGlyphs">A collection of <see cref="QFontGlyph"/>s. These are written to the final bitmap</param>
-		/// <param name="sourceBitmaps"> The source bitmaps for the font (initial bitmap)</param>
-		/// <param name="destSheetWidth">The destination bitmap width</param>
-		/// <param name="destSheetHeight">The destination bitmap height</param>
-		/// <param name="destGlyphs">A collection of <see cref="QFontGlyph"/>s that are placed on the final bitmap sheet</param>
-		/// <param name="destMargin">The margin for the final bitmap sheet</param>
-		/// <returns>A collection of <see cref="QBitmap"/>s. These are the final bitmap sheets</returns>
+        /// <summary>
+        /// Generates the final bitmap sheet for the font
+        /// </summary>
+        /// <param name="sourceGlyphs">A collection of <see cref="QFontGlyph"/>s. These are written to the final bitmap</param>
+        /// <param name="sourceBitmaps"> The source bitmaps for the font (initial bitmap)</param>
+        /// <param name="destSheetWidth">The destination bitmap width</param>
+        /// <param name="destSheetHeight">The destination bitmap height</param>
+        /// <param name="destGlyphs">A collection of <see cref="QFontGlyph"/>s that are placed on the final bitmap sheet</param>
+        /// <param name="destMargin">The margin for the final bitmap sheet</param>
+        /// <returns>A collection of <see cref="QBitmap"/>s. These are the final bitmap sheets</returns>
         private static List<QBitmap> GenerateBitmapSheetsAndRepack(QFontGlyph[] sourceGlyphs, BitmapData[] sourceBitmaps, int destSheetWidth, int destSheetHeight, out QFontGlyph[] destGlyphs, int destMargin)
         {
             var pages = new List<QBitmap>();
@@ -361,24 +362,25 @@ namespace QuickFont
             int finalPageIndex = 0;
             int finalPageRequiredWidth = 0;
             int finalPageRequiredHeight = 0;
-            
-			// We loop through the whole process twice. The first time is to determine
-			// the size of the final page, so that we can crop it in advance
+
+            // We loop through the whole process twice. The first time is to determine
+            // the size of the final page, so that we can crop it in advance
             for (int k = 0; k < 2; k++)
             {
-				// Whether this is the pre-processing step
-                bool pre = k == 0; 
+                // Whether this is the pre-processing step
+                bool pre = k == 0;
 
                 int xPos = 0;
                 int yPos = 0;
                 int maxYInRow = 0;
                 int totalTries = 0;
 
-				// Loop through all the glyphs
+                // Loop through all the glyphs
                 for (int i = 0; i < sourceGlyphs.Length; i++)
                 {
-					// If this is the second stage and we don't already have a bitmap page, create one
-                    if(!pre && currentPage == null){
+                    // If this is the second stage and we don't already have a bitmap page, create one
+                    if (!pre && currentPage == null)
+                    {
 
                         if (finalPageIndex == pages.Count)
                         {
@@ -396,7 +398,7 @@ namespace QuickFont
                         pages.Add(currentPage);
                     }
 
-					// Keep track of the number of times we've tried to fit the font onto the texture page
+                    // Keep track of the number of times we've tried to fit the font onto the texture page
                     totalTries++;
 
                     if (totalTries > 10 * sourceGlyphs.Length)
@@ -404,64 +406,64 @@ namespace QuickFont
 
                     var rect = sourceGlyphs[i].Rect;
 
-					// If we can fit the glyph onto the page, place it
+                    // If we can fit the glyph onto the page, place it
                     if (xPos + rect.Width + 2 * destMargin <= destSheetWidth && yPos + rect.Height + 2 * destMargin <= destSheetHeight)
                     {
                         if (!pre)
                         {
                             // Add to page
-                            if(sourceBitmaps[sourceGlyphs[i].Page].PixelFormat == PixelFormat.Format32bppArgb)
+                            if (sourceBitmaps[sourceGlyphs[i].Page].PixelFormat == PixelFormat.Format32bppArgb)
                                 QBitmap.Blit(sourceBitmaps[sourceGlyphs[i].Page], currentPage.BitmapData, rect.X, rect.Y, rect.Width, rect.Height, xPos + destMargin, yPos + destMargin);
                             else
                                 QBitmap.BlitMask(sourceBitmaps[sourceGlyphs[i].Page], currentPage.BitmapData, rect.X, rect.Y, rect.Width, rect.Height, xPos + destMargin, yPos + destMargin);
 
-							// Add to destination glyph collection
+                            // Add to destination glyph collection
                             destGlyphs[i] = new QFontGlyph(pages.Count - 1, new Rectangle(xPos + destMargin, yPos + destMargin, rect.Width, rect.Height), sourceGlyphs[i].YOffset, sourceGlyphs[i].Character);
                         }
                         else
                         {
-							// Update the final dimensions
+                            // Update the final dimensions
                             finalPageRequiredWidth = Math.Max(finalPageRequiredWidth, xPos + rect.Width + 2 * destMargin);
                             finalPageRequiredHeight = Math.Max(finalPageRequiredHeight, yPos + rect.Height + 2 * destMargin);
                         }
 
-						// Update the current x position
+                        // Update the current x position
                         xPos += rect.Width + 2 * destMargin;
 
-						// Update the maximum row height so far
+                        // Update the maximum row height so far
                         maxYInRow = Math.Max(maxYInRow, rect.Height);
 
                         continue;
                     }
 
-					// If we reach this, haven't been able to fit glyph onto row
-					// Move down one row and try again
+                    // If we reach this, haven't been able to fit glyph onto row
+                    // Move down one row and try again
                     if (xPos + rect.Width + 2 * destMargin > destSheetWidth)
                     {
-						// Retry the current glyph on the next row
+                        // Retry the current glyph on the next row
                         i--;
 
-						// Change coordinates to next row
+                        // Change coordinates to next row
                         yPos += maxYInRow + 2 * destMargin;
                         xPos = 0;
 
-						// Is the next row off the bitmap sheet?
+                        // Is the next row off the bitmap sheet?
                         if (yPos + maxY + 2 * destMargin > destSheetHeight)
                         {
-							// Reset y position
+                            // Reset y position
                             yPos = 0;
 
                             if (!pre)
                             {
-								// If this is not the second stage, reset the currentPage
-								// This will create a new one on next loop
+                                // If this is not the second stage, reset the currentPage
+                                // This will create a new one on next loop
                                 currentPage = null;
                             }
                             else
                             {
-								// If this is the pre-processing stage, update
-								// the finalPageIndex. Reset width and height
-								// since we clearly need one full page and extra
+                                // If this is the pre-processing stage, update
+                                // the finalPageIndex. Reset width and height
+                                // since we clearly need one full page and extra
                                 finalPageRequiredWidth = 0;
                                 finalPageRequiredHeight = 0;
                                 finalPageIndex++;
@@ -475,17 +477,17 @@ namespace QuickFont
             return pages;
         }
 
-		/// <summary>
-		/// Builds the font data
-		/// </summary>
-		/// <param name="saveName">The filename to save the font texture files too. If null, the texture files are not saved</param>
-		/// <returns>A <see cref="QFontData"/></returns>
+        /// <summary>
+        /// Builds the font data
+        /// </summary>
+        /// <param name="saveName">The filename to save the font texture files too. If null, the texture files are not saved</param>
+        /// <returns>A <see cref="QFontData"/></returns>
         public QFontData BuildFontData(string saveName = null)
         {
-			// Check super sample level range
+            // Check super sample level range
             if (_config.SuperSampleLevels <= 0 || _config.SuperSampleLevels > 8)
             {
-                throw new ArgumentOutOfRangeException("SuperSampleLevels = [" + _config.SuperSampleLevels + "] is an unsupported value. Please use values in the range [1,8]"); 
+                throw new ArgumentOutOfRangeException("SuperSampleLevels = [" + _config.SuperSampleLevels + "] is an unsupported value. Please use values in the range [1,8]");
             }
 
             int margin = 3; //margin in initial bitmap (don't bother to make configurable - likely to cause confusion
@@ -494,57 +496,57 @@ namespace QuickFont
             QFontGlyph[] initialGlyphs;
             var sizes = GetGlyphSizes(_font);
             var maxSize = GetMaxGlyphSize(sizes);
-            var initialBmp = CreateInitialBitmap(_font, maxSize, margin, out initialGlyphs,_config.TextGenerationRenderHint);
+            var initialBmp = CreateInitialBitmap(_font, maxSize, margin, out initialGlyphs, _config.TextGenerationRenderHint);
 
-#if DEBUG 
-			// print bitmap with bounds to debug it
-			var debugBmp = initialBmp.Clone() as Bitmap;
-			var graphics = Graphics.FromImage(debugBmp);
-			var pen = new Pen(Color.Red, 1);
+#if DEBUG
+            // print bitmap with bounds to debug it
+            var debugBmp = initialBmp.Clone() as Bitmap;
+            var graphics = Graphics.FromImage(debugBmp);
+            var pen = new Pen(Color.Red, 1);
 
-			foreach (var g in initialGlyphs)
-			{
-				graphics.DrawRectangle(pen, g.Rect);
-			}
+            foreach (var g in initialGlyphs)
+            {
+                graphics.DrawRectangle(pen, g.Rect);
+            }
 
-			graphics.Flush();
-			graphics.Dispose();
+            graphics.Flush();
+            graphics.Dispose();
 
-			debugBmp.Save(_font + "-DEBUG.png", ImageFormat.Png);
+            debugBmp.Save(_font + "-DEBUG.png", ImageFormat.Png);
 #endif
 
             var initialBitmapData = initialBmp.LockBits(new Rectangle(0, 0, initialBmp.Width, initialBmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
 
             int minYOffset = int.MaxValue;
 
-			// Retarget each glyph rectangle to get minimum bounding box
+            // Retarget each glyph rectangle to get minimum bounding box
             foreach (var glyph in initialGlyphs)
             {
                 RetargetGlyphRectangleInwards(initialBitmapData, glyph, true, _config.KerningConfig.AlphaEmptyPixelTolerance);
-                minYOffset = Math.Min(minYOffset,glyph.YOffset);
+                minYOffset = Math.Min(minYOffset, glyph.YOffset);
             }
             minYOffset--; //give one pixel of breathing room?
 
-			// Update glyph y offsets
+            // Update glyph y offsets
             foreach (var glyph in initialGlyphs)
                 glyph.YOffset -= minYOffset;
 
-			// Find the optimal page size for the font
+            // Find the optimal page size for the font
             Size pagesize = GetOptimalPageSize(initialBmp.Width * _config.SuperSampleLevels, initialBmp.Height * _config.SuperSampleLevels, _config.PageMaxTextureSize);
             QFontGlyph[] glyphs;
 
-			// Generate the final bitmap pages
+            // Generate the final bitmap pages
             List<QBitmap> bitmapPages = GenerateBitmapSheetsAndRepack(initialGlyphs, new[] { initialBitmapData }, pagesize.Width, pagesize.Height, out glyphs, glyphMargin);
 
-			// Clean up
+            // Clean up
             initialBmp.UnlockBits(initialBitmapData);
             initialBmp.Dispose();
 
-			// Scale and retarget glyphs if needed
+            // Scale and retarget glyphs if needed
             if (_config.SuperSampleLevels != 1)
             {
                 ScaleSheetsAndGlyphs(bitmapPages, glyphs, 1.0f / _config.SuperSampleLevels);
-                RetargetAllGlyphs(bitmapPages, glyphs,_config.KerningConfig.AlphaEmptyPixelTolerance);
+                RetargetAllGlyphs(bitmapPages, glyphs, _config.KerningConfig.AlphaEmptyPixelTolerance);
             }
 
             //create list of texture pages
@@ -553,18 +555,18 @@ namespace QuickFont
                 pages.Add(new TexturePage(page.BitmapData));
 
 
-			// Build the QFontData
-			var fontData = new QFontData
-			{
-				CharSetMapping = CreateCharGlyphMapping(glyphs),
-				Pages = pages.ToArray()
-			};
-			fontData.CalculateMeanWidth();
+            // Build the QFontData
+            var fontData = new QFontData
+            {
+                CharSetMapping = CreateCharGlyphMapping(glyphs),
+                Pages = pages.ToArray()
+            };
+            fontData.CalculateMeanWidth();
             fontData.CalculateMaxHeight();
-            fontData.KerningPairs = KerningCalculator.CalculateKerning(_charSet.ToCharArray(), glyphs, bitmapPages,_config.KerningConfig, _font);
+            fontData.KerningPairs = KerningCalculator.CalculateKerning(_charSet.ToCharArray(), glyphs, bitmapPages, _config.KerningConfig, _font);
             fontData.NaturallyMonospaced = IsMonospaced(sizes);
 
-			// Save the font texture files if required
+            // Save the font texture files if required
             if (saveName != null)
             {
                 if (bitmapPages.Count == 1)
@@ -584,53 +586,53 @@ namespace QuickFont
                 }
             }
 
-			// Build the font drop shadow if required
+            // Build the font drop shadow if required
             if (_config.ShadowConfig != null)
-                fontData.DropShadowFont = BuildDropShadow(bitmapPages, glyphs, _config.ShadowConfig, _charSet.ToCharArray(),_config.KerningConfig.AlphaEmptyPixelTolerance);
+                fontData.DropShadowFont = BuildDropShadow(bitmapPages, glyphs, _config.ShadowConfig, _charSet.ToCharArray(), _config.KerningConfig.AlphaEmptyPixelTolerance);
 
-			// Clean up resources
+            // Clean up resources
             foreach (var page in bitmapPages)
                 page.Free();
 
-			// Check that no glyphs are overlapping
+            // Check that no glyphs are overlapping
             var intercept = FirstIntercept(fontData.CharSetMapping);
             if (intercept != null)
                 throw new Exception("Failed to create glyph set. Glyphs '" + intercept[0] + "' and '" + intercept[1] + "' were overlapping. This is could be due to an error in the font, or a bug in Graphics.MeasureString().");
-            
+
             return fontData;
         }
 
-		/// <summary>
-		/// Returns the optimal page size
-		/// </summary>
-		/// <param name="width">The desired page width</param>
-		/// <param name="height">The desired page height</param>
-		/// <param name="pageMaxTextureSize">The max page texture size</param>
-		/// <returns>The optimal page size</returns>
+        /// <summary>
+        /// Returns the optimal page size
+        /// </summary>
+        /// <param name="width">The desired page width</param>
+        /// <param name="height">The desired page height</param>
+        /// <param name="pageMaxTextureSize">The max page texture size</param>
+        /// <returns>The optimal page size</returns>
         private static Size GetOptimalPageSize(int width, int height, int pageMaxTextureSize)
         {
-            int rows = (width/(pageMaxTextureSize))+1;
-            return new Size(pageMaxTextureSize, rows*height);
+            int rows = (width / (pageMaxTextureSize)) + 1;
+            return new Size(pageMaxTextureSize, rows * height);
         }
 
-		/// <summary>
-		/// Builds the drop shadow
-		/// </summary>
-		/// <param name="sourceFontSheets">The bitmap sheets from the source font</param>
-		/// <param name="sourceFontGlyphs">The glyphs from the source font</param>
-		/// <param name="shadowConfig">The shadow configuration</param>
-		/// <param name="charSet">The char set to include in the shadow</param>
-		/// <param name="alphaTolerance">The alpha tolerance</param>
-		/// <returns>The shadow QFont</returns>
+        /// <summary>
+        /// Builds the drop shadow
+        /// </summary>
+        /// <param name="sourceFontSheets">The bitmap sheets from the source font</param>
+        /// <param name="sourceFontGlyphs">The glyphs from the source font</param>
+        /// <param name="shadowConfig">The shadow configuration</param>
+        /// <param name="charSet">The char set to include in the shadow</param>
+        /// <param name="alphaTolerance">The alpha tolerance</param>
+        /// <returns>The shadow QFont</returns>
         private static QFont BuildDropShadow(List<QBitmap> sourceFontSheets, QFontGlyph[] sourceFontGlyphs, QFontShadowConfiguration shadowConfig, char[] charSet, byte alphaTolerance)
         {
             QFontGlyph[] newGlyphs;
 
             var sourceBitmapData = new List<BitmapData>();
-            foreach(var sourceSheet in sourceFontSheets)
+            foreach (var sourceSheet in sourceFontSheets)
                 sourceBitmapData.Add(sourceSheet.BitmapData);
-            
-            var bitmapSheets = GenerateBitmapSheetsAndRepack(sourceFontGlyphs, sourceBitmapData.ToArray(), shadowConfig.PageMaxTextureSize, shadowConfig.PageMaxTextureSize, out newGlyphs, shadowConfig.GlyphMargin + shadowConfig.BlurRadius*3);
+
+            var bitmapSheets = GenerateBitmapSheetsAndRepack(sourceFontGlyphs, sourceBitmapData.ToArray(), shadowConfig.PageMaxTextureSize, shadowConfig.PageMaxTextureSize, out newGlyphs, shadowConfig.GlyphMargin + shadowConfig.BlurRadius * 3);
 
             //scale up in case we wanted bigger/smaller shadows
             if (Math.Abs(shadowConfig.Scale - 1.0f) > float.Epsilon)
@@ -654,10 +656,10 @@ namespace QuickFont
             foreach (var page in bitmapSheets)
                 newTextureSheets.Add(new TexturePage(page.BitmapData));
 
-			var fontData = new QFontData {CharSetMapping = new Dictionary<char, QFontGlyph>()};
+            var fontData = new QFontData { CharSetMapping = new Dictionary<char, QFontGlyph>() };
 
-			for(int i = 0; i < charSet.Length; i++)
-                fontData.CharSetMapping.Add(charSet[i],newGlyphs[i]);
+            for (int i = 0; i < charSet.Length; i++)
+                fontData.CharSetMapping.Add(charSet[i], newGlyphs[i]);
 
             fontData.Pages = newTextureSheets.ToArray();
             fontData.CalculateMeanWidth();
@@ -670,12 +672,12 @@ namespace QuickFont
             return new QFont(fontData);
         }
 
-		/// <summary>
-		/// Scales the sheets and glyphs of a font by the specified amount
-		/// </summary>
-		/// <param name="pages">The pages to scale</param>
-		/// <param name="glyphs">The glyphs to scale</param>
-		/// <param name="scale">The amount to scale by</param>
+        /// <summary>
+        /// Scales the sheets and glyphs of a font by the specified amount
+        /// </summary>
+        /// <param name="pages">The pages to scale</param>
+        /// <param name="glyphs">The glyphs to scale</param>
+        /// <param name="scale">The amount to scale by</param>
         private static void ScaleSheetsAndGlyphs(List<QBitmap> pages, QFontGlyph[] glyphs, float scale)
         {
             foreach (var page in pages)
@@ -688,68 +690,70 @@ namespace QuickFont
             }
         }
 
-		/// <summary>
-		/// Updates the glyph targeting - required after they have been scaled
-		/// </summary>
-		/// <param name="pages">The pages containing the glyphs</param>
-		/// <param name="glyphs">The glyphs to retarget</param>
-		/// <param name="alphaTolerance">The alpha tolerance</param>
+        /// <summary>
+        /// Updates the glyph targeting - required after they have been scaled
+        /// </summary>
+        /// <param name="pages">The pages containing the glyphs</param>
+        /// <param name="glyphs">The glyphs to retarget</param>
+        /// <param name="alphaTolerance">The alpha tolerance</param>
         private static void RetargetAllGlyphs(List<QBitmap> pages, QFontGlyph[] glyphs, byte alphaTolerance)
         {
             foreach (var glyph in glyphs)
                 RetargetGlyphRectangleOutwards(pages[glyph.Page].BitmapData, glyph, false, alphaTolerance);
         }
 
-		/// <summary>
-		/// Saves the <see cref="QFontData"/> to the specified file
-		/// This is used for loading custom texture fonts
-		/// </summary>
-		/// <param name="data">The <see cref="QFontData"/> to save</param>
-		/// <param name="filePath">The filepath</param>
+        /// <summary>
+        /// Saves the <see cref="QFontData"/> to the specified file
+        /// This is used for loading custom texture fonts
+        /// </summary>
+        /// <param name="data">The <see cref="QFontData"/> to save</param>
+        /// <param name="filePath">The filepath</param>
         public static void SaveQFontDataToFile(QFontData data, string filePath)
         {
-			// Serialize the font data
+            // Serialize the font data
             var lines = data.Serialize();
 
-			// Write it to the file
+            // Write it to the file
             StreamWriter writer = new StreamWriter(filePath + ".qfont");
             foreach (var line in lines)
                 writer.WriteLine(line);
-            
+
             writer.Close();
         }
 
-		/// <summary>
-		/// Creates an individual bitmap for each glyph
-		/// </summary>
-		/// <param name="sourceGlyphs">The source glyphs</param>
-		/// <param name="sourceBitmaps">The source bitmaps</param>
-		/// <param name="destGlyphs">The destination glyphs</param>
-		/// <param name="destBitmaps">The destination bitmaps</param>
-        public static void CreateBitmapPerGlyph(QFontGlyph[] sourceGlyphs, QBitmap[] sourceBitmaps, out QFontGlyph[]  destGlyphs, out QBitmap[] destBitmaps){
+        /// <summary>
+        /// Creates an individual bitmap for each glyph
+        /// </summary>
+        /// <param name="sourceGlyphs">The source glyphs</param>
+        /// <param name="sourceBitmaps">The source bitmaps</param>
+        /// <param name="destGlyphs">The destination glyphs</param>
+        /// <param name="destBitmaps">The destination bitmaps</param>
+        public static void CreateBitmapPerGlyph(QFontGlyph[] sourceGlyphs, QBitmap[] sourceBitmaps, out QFontGlyph[] destGlyphs, out QBitmap[] destBitmaps)
+        {
             destBitmaps = new QBitmap[sourceGlyphs.Length];
             destGlyphs = new QFontGlyph[sourceGlyphs.Length];
-            for(int i = 0; i < sourceGlyphs.Length; i++){
+            for (int i = 0; i < sourceGlyphs.Length; i++)
+            {
                 var sg = sourceGlyphs[i];
-                destGlyphs[i] = new QFontGlyph(i,new Rectangle(0,0,sg.Rect.Width,sg.Rect.Height),sg.YOffset,sg.Character);
-                destBitmaps[i] = new QBitmap(new Bitmap(sg.Rect.Width,sg.Rect.Height,PixelFormat.Format32bppArgb));
-                QBitmap.Blit(sourceBitmaps[sg.Page].BitmapData,destBitmaps[i].BitmapData,sg.Rect,0,0);
+                destGlyphs[i] = new QFontGlyph(i, new Rectangle(0, 0, sg.Rect.Width, sg.Rect.Height), sg.YOffset, sg.Character);
+                destBitmaps[i] = new QBitmap(new Bitmap(sg.Rect.Width, sg.Rect.Height, PixelFormat.Format32bppArgb));
+                QBitmap.Blit(sourceBitmaps[sg.Page].BitmapData, destBitmaps[i].BitmapData, sg.Rect, 0, 0);
             }
         }
 
-		/// <summary>
-		/// Loads a <see cref="QFontData"/> from the font data file
-		/// </summary>
-		/// <param name="filePath">The font data file to load from</param>
-		/// <param name="downSampleFactor">Whether to downsample the font</param>
-		/// <param name="loaderConfig">The font loader configuration</param>
-		/// <returns>The loaded <see cref="QFontData"/></returns>
+        /// <summary>
+        /// Loads a <see cref="QFontData"/> from the font data file
+        /// </summary>
+        /// <param name="filePath">The font data file to load from</param>
+        /// <param name="downSampleFactor">Whether to downsample the font</param>
+        /// <param name="loaderConfig">The font loader configuration</param>
+        /// <returns>The loaded <see cref="QFontData"/></returns>
         public static QFontData LoadQFontDataFromFile(string filePath, float downSampleFactor, QFontConfiguration loaderConfig)
         {
             var lines = new List<string>();
             StreamReader reader = new StreamReader(filePath);
             string line;
-            while((line = reader.ReadLine()) != null)
+            while ((line = reader.ReadLine()) != null)
                 lines.Add(line);
             reader.Close();
 
@@ -758,8 +762,8 @@ namespace QuickFont
             char[] charSet;
             data.Deserialize(lines, out pageCount, out charSet);
 
-            string namePrefix = filePath.Replace(".qfont","").Replace(" ", "");
-            
+            string namePrefix = filePath.Replace(".qfont", "").Replace(" ", "");
+
             var bitmapPages = new List<QBitmap>();
 
             if (pageCount == 1)
@@ -774,7 +778,7 @@ namespace QuickFont
 
             foreach (var glyph in data.CharSetMapping.Values)
                 RetargetGlyphRectangleOutwards(bitmapPages[glyph.Page].BitmapData, glyph, false, loaderConfig.KerningConfig.AlphaEmptyPixelTolerance);
- 
+
             var intercept = FirstIntercept(data.CharSetMapping);
             if (intercept != null)
             {
@@ -796,25 +800,26 @@ namespace QuickFont
                     glyph.YOffset = (int)(glyph.YOffset * downSampleFactor);
                 }
             }
-            else if (downSampleFactor < 1.0f )
+            else if (downSampleFactor < 1.0f)
             {
                 // If we were simply to shrink the entire texture, then at some point we will make glyphs overlap, breaking the font.
                 // For this reason it is necessary to copy every glyph to a separate bitmap, and then shrink each bitmap individually.
                 QFontGlyph[] shrunkGlyphs;
                 QBitmap[] shrunkBitmapsPerGlyph;
                 CreateBitmapPerGlyph(Helper.ToArray(data.CharSetMapping.Values), bitmapPages.ToArray(), out shrunkGlyphs, out shrunkBitmapsPerGlyph);
-                    
+
                 //shrink each bitmap
                 for (int i = 0; i < shrunkGlyphs.Length; i++)
-                {   
+                {
                     var bmp = shrunkBitmapsPerGlyph[i];
-                    bmp.DownScale32(Math.Max((int)(bmp.Bitmap.Width * downSampleFactor),1), Math.Max((int)(bmp.Bitmap.Height * downSampleFactor),1));
+                    bmp.DownScale32(Math.Max((int)(bmp.Bitmap.Width * downSampleFactor), 1), Math.Max((int)(bmp.Bitmap.Height * downSampleFactor), 1));
                     shrunkGlyphs[i].Rect = new Rectangle(0, 0, bmp.Bitmap.Width, bmp.Bitmap.Height);
                     shrunkGlyphs[i].YOffset = (int)(shrunkGlyphs[i].YOffset * downSampleFactor);
                 }
 
                 var shrunkBitmapData = new BitmapData[shrunkBitmapsPerGlyph.Length];
-                for(int i = 0; i < shrunkBitmapsPerGlyph.Length; i ++ ){
+                for (int i = 0; i < shrunkBitmapsPerGlyph.Length; i++)
+                {
                     shrunkBitmapData[i] = shrunkBitmapsPerGlyph[i].BitmapData;
                 }
 
@@ -837,7 +842,7 @@ namespace QuickFont
             }
 
             data.Pages = new TexturePage[pageCount];
-            for(int i = 0; i < pageCount; i ++ )
+            for (int i = 0; i < pageCount; i++)
                 data.Pages[i] = new TexturePage(bitmapPages[i].BitmapData);
 
             if (Math.Abs(downSampleFactor - 1.0f) > float.Epsilon)
@@ -858,10 +863,10 @@ namespace QuickFont
                 glyphList.Add(data.CharSetMapping[c]);
 
             if (loaderConfig.ShadowConfig != null)
-                data.DropShadowFont = BuildDropShadow(bitmapPages, glyphList.ToArray(), loaderConfig.ShadowConfig, Helper.ToArray(charSet),loaderConfig.KerningConfig.AlphaEmptyPixelTolerance);
+                data.DropShadowFont = BuildDropShadow(bitmapPages, glyphList.ToArray(), loaderConfig.ShadowConfig, Helper.ToArray(charSet), loaderConfig.KerningConfig.AlphaEmptyPixelTolerance);
 
             data.KerningPairs = KerningCalculator.CalculateKerning(Helper.ToArray(charSet), glyphList.ToArray(), bitmapPages, loaderConfig.KerningConfig);
-            
+
             data.CalculateMeanWidth();
             data.CalculateMaxHeight();
 
@@ -871,12 +876,12 @@ namespace QuickFont
             return data;
         }
 
-		/// <summary>
-		/// Find the first intercept between two glyph bounding boxes
-		/// </summary>
-		/// <param name="charSet">The character set to test</param>
-		/// <returns>The overlapping characters</returns>
-        private static char[] FirstIntercept(Dictionary<char,QFontGlyph> charSet)
+        /// <summary>
+        /// Find the first intercept between two glyph bounding boxes
+        /// </summary>
+        /// <param name="charSet">The character set to test</param>
+        /// <returns>The overlapping characters</returns>
+        private static char[] FirstIntercept(Dictionary<char, QFontGlyph> charSet)
         {
             char[] keys = Helper.ToArray(charSet.Keys);
 
@@ -893,12 +898,12 @@ namespace QuickFont
             return null;
         }
 
-		/// <summary>
-		/// Returns true if two rectangles intersect
-		/// </summary>
-		/// <param name="r1">The first rectangle</param>
-		/// <param name="r2">The second rectangle</param>
-		/// <returns>True if the rectangles intersect</returns>
+        /// <summary>
+        /// Returns true if two rectangles intersect
+        /// </summary>
+        /// <param name="r1">The first rectangle</param>
+        /// <param name="r2">The second rectangle</param>
+        /// <returns>True if the rectangles intersect</returns>
         private static bool RectangleIntersect(Rectangle r1, Rectangle r2)
         {
             return (r1.X < r2.X + r2.Width && r1.X + r1.Width > r2.X &&

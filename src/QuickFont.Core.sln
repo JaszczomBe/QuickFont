@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Example\Example.csproj", "{7E2236CD-C252-4657-907F-5A3DBD36B801}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFont.Desktop", "QuickFont.Desktop\QuickFont.Desktop.csproj", "{4F587E0E-E629-4C07-90D6-6544DD82281B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFont.ES20", "QuickFont.ES20\QuickFont.ES20.csproj", "{0A192E76-3662-4F3D-A332-A760B68F2745}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QuickFont.Shared", "QuickFont.Shared\QuickFont.Shared.shproj", "{EB0DDE29-A8F9-4AF6-A44F-A3D1D7001853}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		QuickFont.Shared\QuickFont.Shared.projitems*{0a192e76-3662-4f3d-a332-a760b68f2745}*SharedItemsImports = 5
+		QuickFont.Shared\QuickFont.Shared.projitems*{4f587e0e-e629-4c07-90d6-6544dd82281b}*SharedItemsImports = 5
+		QuickFont.Shared\QuickFont.Shared.projitems*{eb0dde29-a8f9-4af6-a44f-a3d1d7001853}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E2236CD-C252-4657-907F-5A3DBD36B801}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E2236CD-C252-4657-907F-5A3DBD36B801}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E2236CD-C252-4657-907F-5A3DBD36B801}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E2236CD-C252-4657-907F-5A3DBD36B801}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F587E0E-E629-4C07-90D6-6544DD82281B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F587E0E-E629-4C07-90D6-6544DD82281B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F587E0E-E629-4C07-90D6-6544DD82281B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F587E0E-E629-4C07-90D6-6544DD82281B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A192E76-3662-4F3D-A332-A760B68F2745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A192E76-3662-4F3D-A332-A760B68F2745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A192E76-3662-4F3D-A332-A760B68F2745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A192E76-3662-4F3D-A332-A760B68F2745}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3D21FEC-E4E1-48E4-BF5D-6D1B4DF2775A}
+	EndGlobalSection
+EndGlobal

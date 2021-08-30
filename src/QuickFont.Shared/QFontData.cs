@@ -22,7 +22,7 @@ namespace QuickFont
         /// <summary>
         /// Mapping from character to glyph index
         /// </summary>
-        public Dictionary<char, QFontGlyph> CharSetMapping; 
+        public Dictionary<char, QFontGlyph> CharSetMapping;
 
         /// <summary>
         /// The average glyph width
@@ -61,7 +61,7 @@ namespace QuickFont
         /// <returns>True if the font is rendered as monospaced</returns>
         public bool IsMonospacingActive(QFontRenderOptions options)
         {
-            return (options.Monospacing == QFontMonospacing.Natural && NaturallyMonospaced) || options.Monospacing == QFontMonospacing.Yes; 
+            return (options.Monospacing == QFontMonospacing.Natural && NaturallyMonospaced) || options.Monospacing == QFontMonospacing.Yes;
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace QuickFont
                 var chr = glyphChar.Key;
                 var glyph = glyphChar.Value;
 
-                data.Add("" + chr + " " + 
+                data.Add("" + chr + " " +
                     glyph.Page + " " +
                     glyph.Rect.X + " " +
                     glyph.Rect.Y + " " +
@@ -127,7 +127,7 @@ namespace QuickFont
             }
             catch (Exception e)
             {
-                throw new Exception("Failed to parse qfont file. Invalid format.",e);
+                throw new Exception("Failed to parse qfont file. Invalid format.", e);
             }
 
             charSet = charSetList.ToArray();

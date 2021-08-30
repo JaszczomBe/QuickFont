@@ -1,17 +1,17 @@
 ﻿namespace QuickFont.Configuration
 {
-	/// <summary>
-	/// Shadow Type
-	/// </summary>
+    /// <summary>
+    /// Shadow Type
+    /// </summary>
     public enum ShadowType
     {
-		/// <summary>
-		/// Blur the font to create a shadow
-		/// </summary>
+        /// <summary>
+        /// Blur the font to create a shadow
+        /// </summary>
         Blurred,
-		/// <summary>
-		/// Expand the font to create a shadow
-		/// </summary>
+        /// <summary>
+        /// Expand the font to create a shadow
+        /// </summary>
         Expanded
     }
 

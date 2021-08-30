@@ -68,11 +68,11 @@ namespace QuickFont.Configuration
             _characterKerningRules[c] = rule;
         }
 
-		/// <summary>
-		/// Returns the kerning rule corresponding to the character.
-		/// </summary>
-		/// <param name="c">The character to return the kerning rule for</param>
-		/// <returns>The kerning rule corresponding to the given character</returns>
+        /// <summary>
+        /// Returns the kerning rule corresponding to the character.
+        /// </summary>
+        /// <param name="c">The character to return the kerning rule for</param>
+        /// <returns>The kerning rule corresponding to the given character</returns>
         public CharacterKerningRule GetCharacterKerningRule(char c)
         {
             if (_characterKerningRules.ContainsKey(c))
@@ -110,9 +110,9 @@ namespace QuickFont.Configuration
             return CharacterKerningRule.Normal;
         }
 
-		/// <summary>
-		/// Default kerning constructor
-		/// </summary>
+        /// <summary>
+        /// Default kerning constructor
+        /// </summary>
         public QFontKerningConfiguration()
         {
             BatchSetCharacterKerningRule("_^", CharacterKerningRule.Zero);

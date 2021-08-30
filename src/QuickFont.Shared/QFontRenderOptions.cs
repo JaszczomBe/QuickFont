@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using OpenTK;
+﻿using OpenTK.Mathematics;
+using System.Drawing;
 
 namespace QuickFont
 {
@@ -11,7 +11,7 @@ namespace QuickFont
         /// <summary>
         /// Left-aligned text
         /// </summary>
-        Left=0,
+        Left = 0,
 
         /// <summary>
         /// Right-aligned text
@@ -207,7 +207,8 @@ namespace QuickFont
         public float JustifyCharacterWeightForExpand
         {
             get { return _justifyCharWeightForExpand; }
-            set { 
+            set
+            {
 
                 _justifyCharWeightForExpand = MathHelper.Clamp(value, 0.0f, 1.0f);
             }
