@@ -1,26 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.25928.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{23DCA95C-CDCE-4529-948E-7D59D6110A8B}"
 	ProjectSection(SolutionItems) = preProject
 		paket.dependencies = paket.dependencies
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFont.Desktop", "src\QuickFont.Desktop\QuickFont.Desktop.csproj", "{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFont.Desktop", "src\QuickFont.Desktop\QuickFont.Desktop.csproj", "{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "src\Example\Example.csproj", "{84E44D1B-460F-46AF-A0AA-31735088DE3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "src\Example\Example.csproj", "{84E44D1B-460F-46AF-A0AA-31735088DE3F}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QuickFont.Shared", "src\QuickFont.Shared\QuickFont.Shared.shproj", "{ADF0DFB4-FBBD-4336-BB19-62E5A904C38D}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QuickFont.Shared", "src\QuickFont.Shared\QuickFont.Shared.shproj", "{EB0DDE29-A8F9-4AF6-A44F-A3D1D7001853}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFont.ES20", "src\QuickFont.ES20\QuickFont.ES20.csproj", "{F182325F-D682-4639-A19F-AE047DA80518}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFont.ES20", "src\QuickFont.ES20\QuickFont.ES20.csproj", "{F182325F-D682-4639-A19F-AE047DA80518}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\QuickFont.Shared\QuickFont.Shared.projitems*{adf0dfb4-fbbd-4336-bb19-62e5a904c38d}*SharedItemsImports = 13
-		src\QuickFont.Shared\QuickFont.Shared.projitems*{bbece6fc-ef63-40f8-a734-a500d1dfc1af}*SharedItemsImports = 4
-		src\QuickFont.Shared\QuickFont.Shared.projitems*{f182325f-d682-4639-a19f-ae047da80518}*SharedItemsImports = 4
+		src\QuickFont.Shared\QuickFont.Shared.projitems*{bbece6fc-ef63-40f8-a734-a500d1dfc1af}*SharedItemsImports = 5
+		src\QuickFont.Shared\QuickFont.Shared.projitems*{eb0dde29-a8f9-4af6-a44f-a3d1d7001853}*SharedItemsImports = 13
+		src\QuickFont.Shared\QuickFont.Shared.projitems*{f182325f-d682-4639-a19f-ae047da80518}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +42,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C18BA7B6-A9E2-4614-B79A-37AECD02BF9F}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Example\Example.csproj

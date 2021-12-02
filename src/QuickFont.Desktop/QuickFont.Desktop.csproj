@@ -11,6 +11,10 @@
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.6.4" />
     <PackageReference Include="SharpFont.NetStandard" Version="1.0.5" />
